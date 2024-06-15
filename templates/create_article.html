@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Admin
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Add new post</h1>
+    <form method="POST">
+        <input type="text" name="name" id="name" class="form-control" placeholder="Post name"><br>
+        <textarea name="text" id="text" class="form-control" placeholder="Text"></textarea><br>
+        <input type="submit" class="btn btn-success" value="Send"><br>
+    </form>
+</div>
+{% endblock %}
