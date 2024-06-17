@@ -34,9 +34,9 @@ def create_article():
         name = request.form['name']
         text = request.form['text']
 
-        conditionals = Article(name=name, text=text)
+        article = Article(name=name, text=text)
         try:
-            db.session.add(conditionals)
+            db.session.add(article)
             db.session.commit()
             return redirect('/posts')
         except Exception as e:
@@ -55,10 +55,39 @@ def posts():
     return render_template("posts.html", articles=articles)
 
 
+@app.route('/posts/<int:id>/delete')
+def post_delete(id):
+    article = Article.query.get_or_404(id)
+    try:
+        db.session.delete(article)
+        db.session.commit()
+        return redirect('/posts')
+    except Exception as e:
+        print(f"Error: {e}")
+        return "Error"
+
+
+@app.route('/posts/<int:id>/update', methods=['POST', 'GET'])
+def post_update(id):
+    article = Article.query.get(id)
+    if request.method == 'POST':
+        article.name = request.form['name']
+        article.text = request.form['text']
+        try:
+            db.session.commit()
+            return redirect('/posts')
+        except Exception as e:
+            print(f"Error: {e}")
+            return "Error"
+    else:
+        return render_template("post_update.html", article=article)
+
+
 @app.route('/posts/<int:id>')
 def post(id):
     article = Article.query.get(id)
     return render_template("post.html", article=article)
+
 
 # Creating tables
 with app.app_context():
